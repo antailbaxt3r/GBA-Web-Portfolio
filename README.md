@@ -1,8 +1,8 @@
-# Pallet Town Portfolio
+# 8-bit Portfolio
 
 A personal portfolio that is not a website but a small explorable town, rendered
 like a Game Boy Advance overworld. You control a pixel trainer, walk around, and
-enter four buildings — Work, Projects, About Me, Contact — reading the portfolio
+enter four buildings - Work, Projects, About Me, Contact — reading the portfolio
 through in-world objects and dialogue boxes.
 
 Built with **Phaser 4 + TypeScript + Vite**. Every pixel and every note of audio
