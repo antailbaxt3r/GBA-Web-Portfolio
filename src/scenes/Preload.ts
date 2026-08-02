@@ -13,7 +13,6 @@ export class Preload extends Phaser.Scene {
 
   private bar!: Phaser.GameObjects.Rectangle;
   private pct!: Phaser.GameObjects.BitmapText;
-  private file!: Phaser.GameObjects.BitmapText;
   private startedAt = 0;
   private failures: string[] = [];
   private criticalFailure = false;
@@ -61,7 +60,6 @@ export class Preload extends Phaser.Scene {
     for (const a of audio) this.load.audio(a, [`audio/${a}.ogg`, `audio/${a}.m4a`]);
 
     this.load.on(Phaser.Loader.Events.PROGRESS, this.onProgress, this);
-    this.load.on(Phaser.Loader.Events.FILE_PROGRESS, this.onFile, this);
     this.load.on(Phaser.Loader.Events.FILE_LOAD_ERROR, this.onError, this);
   }
 
@@ -80,16 +78,14 @@ export class Preload extends Phaser.Scene {
     this.bar = this.add.rectangle(cx - BAR_W / 2, 90, 0, BAR_H, 0x4890d8).setOrigin(0, 0.5);
 
     this.pct = this.add.bitmapText(cx, 100, 'font-small', '0%').setOrigin(0.5, 0);
-    this.file = this.add.bitmapText(cx, 114, 'font-small', 'LOADING').setOrigin(0.5, 0);
+    // Static label. Naming each file as it loads flickers through 30-odd keys
+    // in under a second, which reads as noise rather than progress.
+    this.add.bitmapText(cx, 114, 'font-small', 'LOADING').setOrigin(0.5, 0);
   }
 
   private onProgress(value: number): void {
     this.bar.width = BAR_W * value;
     this.pct.setText(`${Math.round(value * 100)}%`);
-  }
-
-  private onFile(file: Phaser.Loader.File): void {
-    // this.file.setText(file.key.slice(0, 28).toUpperCase());
   }
 
   private onError(file: Phaser.Loader.File): void {

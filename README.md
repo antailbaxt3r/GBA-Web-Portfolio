@@ -121,3 +121,53 @@ that:
 - dialogue is mirrored into an `aria-live` region as it is revealed
 - `<noscript>` renders the full text version
 
+- JSON-LD `Person` schema, Open Graph tags and a 1200x630 preview image are
+  generated too, along with `robots.txt` and `sitemap.xml`
+
+---
+
+## Deploying (Netlify)
+
+Config lives in [`netlify.toml`](netlify.toml). Connect the repo in Netlify and
+it picks everything up — build command, publish directory, Node version,
+security headers and caching. No dashboard settings required.
+
+```bash
+# production deploy from your machine
+npm run deploy
+
+# draft deploy with a shareable preview URL
+npm run deploy:preview
+
+# exactly what Netlify runs
+npm run validate && npm run build
+
+# check the production bundle locally first
+npm run build && npm run preview
+```
+
+**Assets are committed on purpose.** The art generator rasterises the bitmap
+font from `reference/pokemon_fire_red.ttf`, which is gitignored and never
+deployed, so Netlify *cannot* regenerate `public/assets/`. After changing
+anything in `tools/`, run `npm run assets:all` locally and commit the result.
+`npm run validate` runs on every deploy and fails it if content and maps have
+drifted apart.
+
+**URLs resolve themselves.** Netlify injects `URL` and `DEPLOY_PRIME_URL`, and
+`vite.config.ts` uses them for the canonical tag, Open Graph URLs, JSON-LD and
+`sitemap.xml` — so branch deploys advertise their own address rather than the
+production one. Set `SITE_URL` to override.
+
+### Output layout and caching
+
+| Path | Cache-Control |
+|---|---|
+| `/build/*` | `max-age=31536000, immutable` — content-hashed by Vite |
+| `/assets/*` | `max-age=86400, stale-while-revalidate` — stable names the game loads by path |
+| `/index.html` | `max-age=0, must-revalidate` |
+
+Vite's bundle is emitted to `/build`, not `/assets`, so hashed and stable-named
+files never share a directory and each can carry the correct cache rule.
+
+A strict Content-Security-Policy is set in `netlify.toml`; the production build
+was verified to run under it with zero violations.

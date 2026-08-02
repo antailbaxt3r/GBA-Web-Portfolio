@@ -1,0 +1,61 @@
+[build]
+  # `validate` gates the deploy: it fails the build if any content string
+  # contains a glyph the bitmap font cannot render, if any map object points at
+  # a dialogue node that does not exist, or if a project/role/degree was added
+  # to content.ts without a matching object placed in a map.
+  #
+  # Note it does NOT regenerate art. The asset generator rasterises the font
+  # from reference/pokemon_fire_red.ttf, which is gitignored and never
+  # deployed, so public/assets/ is committed and is the source of truth here.
+  # Run `npm run assets:all` locally and commit the result after art changes.
+  command = "npm run validate && npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+  # Netlify sets URL / DEPLOY_PRIME_URL automatically; vite.config.ts reads them
+  # for canonical, Open Graph and sitemap URLs. Set SITE_URL only to override.
+
+# ---------------------------------------------------------------------------
+# Security headers
+# ---------------------------------------------------------------------------
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=(), payment=()"
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self'; connect-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+
+# ---------------------------------------------------------------------------
+# Caching
+#
+# /build/* is content-hashed by Vite, so it can be cached forever.
+# /assets/* keeps stable filenames (the game loads them by path), so it must
+# revalidate or a redeploy would leave visitors on stale art.
+# ---------------------------------------------------------------------------
+[[headers]]
+  for = "/build/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
+
+[[headers]]
+  for = "/resume.pdf"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, must-revalidate"

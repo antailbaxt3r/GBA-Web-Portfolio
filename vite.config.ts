@@ -5,24 +5,77 @@ import path from 'node:path';
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 
+/**
+ * Absolute site URL. Netlify injects `URL` (the primary domain) and
+ * `DEPLOY_PRIME_URL` (branch/preview deploys) automatically, so canonical tags,
+ * Open Graph URLs and the sitemap are correct on every deploy without anyone
+ * editing a constant. SITE_URL overrides both if you need to force one.
+ */
+function resolveSiteUrl(fallback: string): string {
+  const raw =
+    process.env.SITE_URL ||
+    (process.env.CONTEXT === 'production' ? process.env.URL : process.env.DEPLOY_PRIME_URL) ||
+    process.env.URL ||
+    fallback;
+  return raw.replace(/\/+$/, '');
+}
+
+/** Compile and evaluate src/data/content.ts once per build. */
+let contentPromise: Promise<typeof import('./src/data/content')> | null = null;
+function loadContent() {
+  contentPromise ??= (async () => {
+    const out = await build({
+      entryPoints: [path.join(ROOT, 'src/data/content.ts')],
+      bundle: true,
+      write: false,
+      format: 'esm',
+      platform: 'neutral',
+      logLevel: 'silent',
+    });
+    const code = out.outputFiles[0]!.text;
+    return (await import(
+      `data:text/javascript;base64,${Buffer.from(code).toString('base64')}`
+    )) as typeof import('./src/data/content');
+  })();
+  return contentPromise;
+}
+
 function staticMirror(): Plugin {
   return {
     name: 'portfolio-static-mirror',
-    async transformIndexHtml(html) {
-      const out = await build({
-        entryPoints: [path.join(ROOT, 'src/data/content.ts')],
-        bundle: true,
-        write: false,
-        format: 'esm',
-        platform: 'neutral',
-        logLevel: 'silent',
+
+    // robots.txt and sitemap.xml are emitted rather than committed so they can
+    // never point at a stale domain. Resolved independently of the HTML hook,
+    // because plugin hook order between the two is not guaranteed.
+    async generateBundle() {
+      const { META } = await loadContent();
+      const origin = resolveSiteUrl(META.url);
+      this.emitFile({
+        type: 'asset',
+        fileName: 'robots.txt',
+        source: `User-agent: *\nAllow: /\n\nSitemap: ${origin}/sitemap.xml\n`,
       });
-      const code = out.outputFiles[0]!.text;
-      const mod = (await import(
-        `data:text/javascript;base64,${Buffer.from(code).toString('base64')}`
-      )) as typeof import('./src/data/content');
+      this.emitFile({
+        type: 'asset',
+        fileName: 'sitemap.xml',
+        source:
+          `<?xml version="1.0" encoding="UTF-8"?>\n` +
+          `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+          `  <url>\n    <loc>${origin}/</loc>\n` +
+          `    <lastmod>${new Date().toISOString().slice(0, 10)}</lastmod>\n` +
+          `    <changefreq>monthly</changefreq>\n    <priority>1.0</priority>\n  </url>\n` +
+          `</urlset>\n`,
+      });
+    },
+
+    async transformIndexHtml(html) {
+      // In dev the module is re-evaluated on each request so content edits
+      // show up without a restart.
+      if (process.env.NODE_ENV !== 'production') contentPromise = null;
+      const mod = await loadContent();
 
       const { META, CONTACT, WORK, PROJECTS, ABOUT, SKILLS, EDUCATION } = mod;
+      const siteUrl = resolveSiteUrl(META.url);
       const esc = (s: string) =>
         s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -104,23 +157,33 @@ function staticMirror(): Plugin {
         name: META.name,
         jobTitle: META.role,
         description: META.siteDescription,
-        url: META.url,
+        url: siteUrl,
         email: `mailto:${CONTACT.email}`,
         sameAs: [CONTACT.github, CONTACT.linkedin].filter(Boolean),
         knowsAbout: [...SKILLS.languages, ...SKILLS.frameworks],
       };
 
+      const ogImage = `${siteUrl}/og-image.png`;
       return html
         .replace('<!--MIRROR-->', mirror)
         .replace(
           '<!--HEAD-->',
           `<title>${esc(META.siteTitle)}</title>
     <meta name="description" content="${esc(META.siteDescription)}" />
-    <link rel="canonical" href="${esc(META.url)}" />
+    <link rel="canonical" href="${esc(siteUrl)}/" />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="${esc(META.name)}" />
+    <meta property="og:url" content="${esc(siteUrl)}/" />
     <meta property="og:title" content="${esc(META.siteTitle)}" />
     <meta property="og:description" content="${esc(META.siteDescription)}" />
+    <meta property="og:image" content="${esc(ogImage)}" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="A pixel-art town with buildings labelled ABOUT and PROJECTS" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="${esc(META.siteTitle)}" />
+    <meta name="twitter:description" content="${esc(META.siteDescription)}" />
+    <meta name="twitter:image" content="${esc(ogImage)}" />
     <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`
         );
     },
@@ -132,6 +195,11 @@ export default defineConfig({
   build: {
     target: 'es2022',
     assetsInlineLimit: 0, // keep pixel art as real files so caching works
+    // Hashed bundle output goes to /build, NOT /assets. public/assets/ is
+    // copied to dist/assets/ verbatim, and mixing content-hashed files with
+    // stable-named ones in a single directory makes it impossible to set a
+    // correct Cache-Control rule for either.
+    assetsDir: 'build',
   },
   server: { host: true },
 });

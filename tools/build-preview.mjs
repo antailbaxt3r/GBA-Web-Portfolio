@@ -70,7 +70,7 @@ const fontMain = loadFont('fonts/font-main.png', 'fonts/font-main.xml');
 // ---------------------------------------------------------------------------
 // Mock scene: one authentic 240x160 GBA screen
 // ---------------------------------------------------------------------------
-function mockScene() {
+function mockScene(withBox = true) {
   const W = 240, H = 160;
   const s = new Bitmap(W, H);
   const N = 1, S = 2, Wm = 4, E = 8;
@@ -127,11 +127,13 @@ function mockScene() {
   s.blit(playerFrame(1, 0), 112, 88);
 
   // dialogue box across the bottom, built from the 9-slice like the game does
-  const box = nine(frame('window-frame'), 6, 232, 46);
-  s.blit(box, 4, 108);
-  drawText(s, fontMain, 'ARJUN: This town is my portfolio.', 12, 116);
-  drawText(s, fontMain, 'Press Z to talk, arrows to walk.', 12, 130);
-  s.blit(frame('advance-arrow'), 220, 142);
+  if (withBox) {
+    const box = nine(frame('window-frame'), 6, 232, 46);
+    s.blit(box, 4, 108);
+    drawText(s, fontMain, 'ARJUN: This town is my portfolio.', 12, 116);
+    drawText(s, fontMain, 'Press Z to talk, arrows to walk.', 12, 130);
+    s.blit(frame('advance-arrow'), 220, 142);
+  }
   return s;
 }
 
@@ -226,5 +228,12 @@ const sheetBmp = contactSheet();
 sheetBmp.save(path.join(OUT, 'contact-sheet.png'));
 mockScene().save(path.join(OUT, 'scene.png'));
 scale(mockScene(), 4).save(path.join(OUT, 'scene-4x.png'));
+
+// Social preview card. 126 source rows at 5x is exactly 1200x630, the size
+// Open Graph wants, so the banner is pure gameplay with no letterboxing.
+const OG_W = 240, OG_H = 126;
+const ogSrc = mockScene(false).sub(0, Math.floor((160 - OG_H) / 2), OG_W, OG_H);
+scale(ogSrc, 5).save(path.join(ROOT, 'public', 'og-image.png'));
+console.log(`preview -> public/og-image.png (1200x630)`);
 console.log(`preview -> ${OUT}/contact-sheet.png (${sheetBmp.width}x${sheetBmp.height})`);
 console.log(`preview -> ${OUT}/scene.png, scene-4x.png`);

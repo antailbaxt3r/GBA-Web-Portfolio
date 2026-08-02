@@ -13,13 +13,16 @@
     "maps": "node tools/generate-maps.mjs",
     "audio": "node tools/generate-audio.mjs",
     "validate": "node tools/validate.mjs",
-    "assets:all": "npm run assets && npm run maps && npm run audio && npm run validate"
+    "assets:all": "npm run assets && npm run maps && npm run audio && npm run validate",
+    "deploy": "netlify deploy --build --prod",
+    "deploy:preview": "netlify deploy --build"
   },
   "dependencies": {
     "easystarjs": "^0.4.4",
     "phaser": "^4.2.1"
   },
   "devDependencies": {
+    "@types/node": "^26.1.2",
     "opentype.js": "^2.0.0",
     "typescript": "^5.7.2",
     "vite": "^6.0.5"
