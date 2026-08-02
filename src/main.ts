@@ -18,10 +18,20 @@ const config: Phaser.Types.Core.GameConfig = {
   pixelArt: true,
   roundPixels: true, // v4 defaults this to false
   antialias: false,
-  backgroundColor: '#101018',
+  // Transparent, so the page background is the single source of the letterbox
+  // colour. When the canvas paints its own background there are two nearly
+  // identical dark colours on screen and the seam between them is visible.
+  transparent: true,
   scale: {
-    mode: Phaser.Scale.FIT,
-    autoCenter: Phaser.Scale.CENTER_BOTH,
+    // NONE + an explicit zoom, not FIT. FIT recomputes the canvas style on
+    // every resize and overwrites any integer scale set from outside it,
+    // leaving a fractional factor (4.5x) that makes pixels uneven.
+    mode: Phaser.Scale.NONE,
+    // #game-root already centres the canvas with CSS grid. Phaser's autoCenter
+    // additionally sets margin-left/top, and the grid then centres the box
+    // *including* that margin — so the offset lands one and a half times and
+    // the whole game sits off to one side. Exactly one of them may centre.
+    autoCenter: Phaser.Scale.NO_CENTER,
   },
   scene: [Boot, Preload, Title, World, UIScene],
 };
@@ -41,21 +51,13 @@ if (import.meta.env.DEV) {
 // fall back to fractional scaling because legibility beats crispness there.
 // ---------------------------------------------------------------------------
 function applyIntegerScale(): void {
-  const canvas = game.canvas;
-  if (!canvas) return;
-  const host = canvas.parentElement ?? document.body;
-  const availW = host.clientWidth || window.innerWidth;
-  const availH = host.clientHeight || window.innerHeight;
-  const zoom = Math.min(availW / VIEW_W, availH / VIEW_H);
-
-  if (zoom >= 2) {
-    const z = Math.min(6, Math.floor(zoom));
-    canvas.style.width = `${VIEW_W * z}px`;
-    canvas.style.height = `${VIEW_H * z}px`;
-  } else {
-    canvas.style.width = '';
-    canvas.style.height = '';
-  }
+  if (!game.scale) return;
+  const availW = window.innerWidth;
+  const availH = window.innerHeight;
+  const fit = Math.min(availW / VIEW_W, availH / VIEW_H);
+  // Below 2x, legibility beats crispness, so allow a fractional factor there.
+  const zoom = fit >= 2 ? Math.min(8, Math.floor(fit)) : Math.max(0.5, fit);
+  if (game.scale.zoom !== zoom) game.scale.setZoom(zoom);
 }
 
 let resizeTimer = 0;

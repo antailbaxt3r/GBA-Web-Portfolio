@@ -53,7 +53,11 @@ function staticMirror(): Plugin {
     <li><strong>Tools:</strong> ${SKILLS.tools.map(esc).join(', ')}</li>
   </ul>
   <h3>Education</h3>
-  <p>${esc(EDUCATION.degree)}, ${esc(EDUCATION.school)} (${esc(EDUCATION.years)})</p>
+  ${EDUCATION.map(
+    (d) => `<p>${esc(d.degree)}, ${esc(d.school)} <span class="dates">(${esc(d.years)}${
+      d.location ? `, ${esc(d.location)}` : ''
+    })</span></p>`
+  ).join('')}
 </section>
 
 <section id="projects" aria-labelledby="projects-h">

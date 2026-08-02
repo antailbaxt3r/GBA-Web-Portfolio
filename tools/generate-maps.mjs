@@ -137,13 +137,16 @@ function tree(map, tx, ty) {
 }
 
 function prop(map, frame, tx, ty, opts = {}) {
-  const { bw = 1, bh = 1, ox = 0, oy = 0, blocking = true } = opts;
+  const { bw = 1, bh = 1, ox = 0, oy = 0, blocking = true, floor = false } = opts;
   map.objects.push({
     id: opts.id ?? `${frame}-${tx}-${ty}`,
     type: 'prop',
     frame,
     x: tx * TS + ox,
     y: ty * TS + oy,
+    // Floor decor sits just above the tilemap layers so characters always walk
+    // ON it. Default y-sorting would let a rug draw over the player's feet.
+    ...(floor ? { depth: 2 } : {}),
   });
   if (blocking) block(map, tx, ty, bw, bh);
 }
@@ -355,11 +358,12 @@ function buildWorkInterior() {
       }
     }
     npc(m, 'npc-trainer', `work.role.${i}`, x, y, { facing: 'down' });
-    prop(m, 'platform', x, y + 1, { bw: 2, blocking: false, id: `plat-${i}` });
+    prop(m, 'platform', x, y + 1, { bw: 2, blocking: false, floor: true, id: `plat-${i}` });
   });
 
   interactable(m, 'work.skills', 'trophy-case', 2, 3, { bw: 2, oy: -16 });
-  interactable(m, 'work.education', 'certificate', 12, 3, { oy: -8 });
+  interactable(m, 'work.education.0', 'certificate', 11, 3, { oy: -8 });
+  interactable(m, 'work.education.1', 'certificate', 13, 3, { oy: -8 });
   prop(m, 'bookshelf', 5, 3, { oy: -16 });
   prop(m, 'bookshelf', 10, 3, { oy: -16 });
   npc(m, 'npc-clerk', 'work.intro', 10, H - 2, { facing: 'left', movement: 'lookAround' });
@@ -369,13 +373,13 @@ function buildWorkInterior() {
 }
 
 function buildProjectsInterior() {
-  const { m, W, H } = buildInteriorShell('interior-projects', I.TILE, 'from-projects', 15, 12);
+  const { m, W, H } = buildInteriorShell('interior-projects', I.TILE, 'from-projects', 15, 13);
 
   for (const x of [2, 3, 11, 12]) prop(m, 'bookshelf', x, 3, { oy: -16 });
   interactable(m, 'projects.intro', 'lab-machine', 6, 3, { bw: 2, oy: -16 });
 
   // One terminal per project, each on its own desk.
-  const PCS = [[3, 7], [7, 7], [11, 7]];
+  const PCS = [[2, 6], [5, 6], [10, 6], [13, 6]];
   PCS.forEach(([x, y], i) => {
     interactable(m, `projects.item.${i}`, 'pc', x, y, { oy: -8 });
     prop(m, 'table', x - 1, y + 1, { bw: 2, oy: -6, id: `desk-${i}` });
@@ -398,7 +402,7 @@ function buildAboutInterior() {
 
   prop(m, 'table', 3, 6, { bw: 2 });
   interactable(m, 'about.trainercard', 'pc', 9, 6, { oy: -8 });
-  prop(m, 'rug', 5, 7, { bw: 2, blocking: false });
+  prop(m, 'rug', 5, 7, { bw: 2, blocking: false, floor: true });
   npc(m, 'npc-townsfolk-b', 'about.photo', 1, 7, { facing: 'right', movement: 'lookAround' });
   return m;
 }
@@ -414,7 +418,7 @@ function buildContactInterior() {
   prop(m, 'bookshelf', 10, 3, { oy: -16 });
   prop(m, 'plant', 1, H - 2, { oy: -8 });
   prop(m, 'plant', W - 2, H - 2, { oy: -8 });
-  prop(m, 'rug', 8, 7, { bw: 2, blocking: false });
+  prop(m, 'rug', 8, 7, { bw: 2, blocking: false, floor: true });
   return m;
 }
 

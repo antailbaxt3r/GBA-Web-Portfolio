@@ -25,7 +25,6 @@ export class Title extends Phaser.Scene {
   }
 
   create(): void {
-    this.cameras.main.setBackgroundColor('#101018');
     this.cameras.main.fadeIn(300, 0, 0, 0);
     Audio.attach(this);
 

@@ -59,7 +59,7 @@ export const META = {
   siteTitle: 'Arjun Bajpai - Portfolio',
   siteDescription:
     'The portfolio of Arjun Bajpai, software engineer, built as an explorable pixel-art town.',
-  url: 'https://example.com', // TODO(arjun): real domain
+  url: 'https://arjunbajpaicodes.netlify.app',
 };
 
 export const CONTACT = {
@@ -103,6 +103,7 @@ export const WORK: WorkRole[] = [
     title: 'Software Engineer Intern',
     start: '2022',
     end: '2021',
+    location: 'Hyderabad, India',
     bullets: [
       'Implemented Partial Restore capability for Azure Backup,.',
       'Designed parallelized Full Sync infrastructure to optimize backup stage execution.',
@@ -117,11 +118,28 @@ export const SKILLS = {
   tools: ['PyTorch', 'GraphRAG', 'Numpy', 'Pandas', 'OpenCV', 'Scikit-learn', 'Matplotlib', 'CNN', 'RNN', 'ResNets'],
 };
 
-export const EDUCATION = {
-  school: 'UNIVERSITY NAME', // TODO(arjun)
-  degree: 'B.Tech, Computer Science',
-  years: '2017 - 2021',
-};
+export interface Degree {
+  school: string;
+  degree: string;
+  years: string;
+  location?: string;
+}
+
+/** One certificate hangs in the Battle Hall for each entry here. */
+export const EDUCATION: Degree[] = [
+  {
+    school: 'New York University', 
+    degree: 'M.S. Computer Science',
+    years: '2025 - 2027',
+    location: 'New York, NY',
+  },
+  {
+    school: 'BITS Pilani',
+    degree: 'B.E. Computer Science',
+    years: '2018 - 2022',
+    location: 'India',
+  },
+];
 
 // ---------------------------------------------------------------------------
 // Projects  (the Research Lab — one PC terminal per project)
@@ -134,24 +152,34 @@ export const PROJECTS: Project[] = [
     description: 'A GBA overworld you walk around. All art made from code.',
     tech: ['Phaser 4', 'TypeScript', 'Vite'],
     year: '2026',
-    repo: 'https://github.com/antailbaxt3r/',
+    repo: 'https://github.com/antailbaxt3r/GBA-Web-Portfolio',
   },
   {
-    name: 'PROJECT TWO', // TODO(arjun)
-    pitch: 'A thing that does a thing.',
-    description: 'Describe what it does and what the result was.',
-    tech: ['React', 'Node'],
+    name: 'ERICA AI',
+    pitch: 'A local AI course tutor.',
+    description:
+      'Builds a knowledge graph from PDFs, videos and web pages, then answers with cited, scaffolded explanations. Runs fully offline.',
+    tech: ['Python', 'Neo4j', 'MongoDB', 'Ollama', 'Docker'],
+    year: '2026',
+    repo: 'https://github.com/antailbaxt3r/Erica-AI',
+  },
+  {
+    name: 'CONTEXTLY',
+    pitch: 'Ask your own documents questions.',
+    description:
+      'A local RAG pipeline: upload a PDF, get answers grounded in the exact passages they came from. No API keys needed.',
+    tech: ['Next.js', 'FastAPI', 'pgvector', 'Celery', 'Ollama'],
+    year: '2026',
+    repo: 'https://github.com/antailbaxt3r/contextly',
+  },
+  {
+    name: 'POST GENERATOR',
+    pitch: 'AI writing tool for LINKEDIN.',
+    description:
+      'Drafts posts with GEMINI or OPENAI, suggests articles for inspiration, and tracks how each post performed.',
+    tech: ['React', 'Express', 'Drizzle', 'Postgres', 'Gemini'],
     year: '2025',
-    repo: 'https://github.com/',
-    demo: 'https://example.com',
-  },
-  {
-    name: 'PROJECT THREE',
-    pitch: 'Another thing.',
-    description: 'Describe what it does and what the result was.',
-    tech: ['Go', 'Postgres'],
-    year: '2024',
-    repo: 'https://github.com/',
+    repo: 'https://github.com/antailbaxt3r/linkedin-post-generator',
   },
 ];
 
@@ -235,11 +263,7 @@ const nodes: ContentNode[] = [
       `TOOLS: ${SKILLS.tools.join(', ')}`,
     ],
   },
-  {
-    id: 'work.education',
-    title: 'CERTIFICATE',
-    pages: [`${EDUCATION.degree}`, `${EDUCATION.school}`, `${EDUCATION.years}`],
-  },
+  // One node per degree; see the EDUCATION loop below.
   {
     id: 'projects.intro',
     title: 'RESEARCH LAB',
@@ -318,6 +342,15 @@ ABOUT.facts.forEach((fact, i) => {
   nodes.push({ id: `about.tv.${i}`, title: 'TV', pages: [fact] });
 });
 
+// One certificate on the Battle Hall wall per degree.
+EDUCATION.forEach((d, i) => {
+  nodes.push({
+    id: `work.education.${i}`,
+    title: 'CERTIFICATE',
+    pages: [d.degree, d.school, `${d.years}${d.location ? `, ${d.location}` : ''}`],
+  });
+});
+
 // One node per work role, rendered onto the Battle Hall trainers.
 WORK.forEach((role, i) => {
   nodes.push({
@@ -325,7 +358,7 @@ WORK.forEach((role, i) => {
     title: role.company,
     pages: [
       `${role.title}`,
-      `${role.company}, ${role.start} - ${role.end}`,
+      `${role.location}, ${role.start} - ${role.end}`,
       ...role.bullets,
       `STACK: ${role.tech.join(', ')}`,
     ],

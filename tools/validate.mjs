@@ -115,13 +115,29 @@ mod.PROJECTS.forEach((p, i) => {
 // Every interactable and NPC must point at a real dialogue node.
 const mapDir = path.join(ASSETS, 'maps');
 let refCount = 0;
+const placed = new Set();
 for (const f of fs.readdirSync(mapDir).filter((f) => f.endsWith('.objects.json'))) {
   const { name, objects } = JSON.parse(fs.readFileSync(path.join(mapDir, f), 'utf8'));
   for (const o of objects) {
     if (o.type !== 'interactable' && o.type !== 'npc') continue;
     refCount++;
+    placed.add(o.contentId);
     if (!mod.CONTENT[o.contentId]) {
       errors.push(`${name}: object "${o.id}" references missing content id "${o.contentId}"`);
+    }
+  }
+}
+
+// ...and the reverse: adding a fifth project without a fifth terminal in the
+// Lab would otherwise silently hide it from the game.
+for (const prefix of ['projects.item.', 'work.role.', 'work.education.']) {
+  const expected = Object.keys(mod.CONTENT).filter((k) => k.startsWith(prefix));
+  for (const id of expected) {
+    if (!placed.has(id)) {
+      errors.push(
+        `"${id}" exists in content.ts but nothing in any map points at it - ` +
+        `add a matching object in tools/generate-maps.mjs`
+      );
     }
   }
 }
