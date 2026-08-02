@@ -127,7 +127,7 @@ export const PAL = {
   uiBorderDark: P('#404868'),
   uiShadow: P('#A8B8C8'),
   uiText: P('#404868'),
-  uiTextShadow: P('#A8B8C8'),
+  uiTextShadow: P('#D8E0E8'),
   uiAccent: P('#C03040'),
 
   // --- player ---

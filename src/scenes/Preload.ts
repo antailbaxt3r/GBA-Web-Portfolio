@@ -66,7 +66,6 @@ export class Preload extends Phaser.Scene {
   }
 
   private buildLoadingScreen(): void {
-    this.cameras.main.setBackgroundColor('#101018');
     const cx = VIEW_W / 2;
 
     this.anims.create({
@@ -90,7 +89,7 @@ export class Preload extends Phaser.Scene {
   }
 
   private onFile(file: Phaser.Loader.File): void {
-    this.file.setText(file.key.slice(0, 28).toUpperCase());
+    // this.file.setText(file.key.slice(0, 28).toUpperCase());
   }
 
   private onError(file: Phaser.Loader.File): void {

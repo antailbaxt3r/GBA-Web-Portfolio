@@ -122,13 +122,14 @@
    "type": "prop",
    "frame": "rug",
    "x": 80,
-   "y": 112
+   "y": 112,
+   "depth": 2
   },
   {
    "id": "npc-about.photo",
    "type": "npc",
    "sprite": "npc-townsfolk-b",
-   "contentId": "about.arjun",
+   "contentId": "about.photo",
    "x": 16,
    "y": 112,
    "facing": "right",

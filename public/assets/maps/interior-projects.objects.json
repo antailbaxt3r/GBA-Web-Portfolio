@@ -1,13 +1,13 @@
 {
  "name": "interior-projects",
  "width": 15,
- "height": 12,
+ "height": 13,
  "objects": [
   {
    "id": "exit",
    "type": "door",
    "x": 112,
-   "y": 176,
+   "y": 192,
    "target": "town",
    "targetSpawn": "from-projects",
    "transition": "door"
@@ -16,7 +16,7 @@
    "id": "entry",
    "type": "spawn",
    "x": 112,
-   "y": 160,
+   "y": 176,
    "facing": "up"
   },
   {
@@ -72,64 +72,85 @@
    "id": "projects.item.0-art",
    "type": "prop",
    "frame": "pc",
-   "x": 48,
-   "y": 104
+   "x": 32,
+   "y": 88
   },
   {
    "id": "projects.item.0-0",
    "type": "interactable",
    "contentId": "projects.item.0",
-   "x": 48,
-   "y": 112
+   "x": 32,
+   "y": 96
   },
   {
    "id": "desk-0",
    "type": "prop",
    "frame": "table",
-   "x": 32,
-   "y": 122
+   "x": 16,
+   "y": 106
   },
   {
    "id": "projects.item.1-art",
    "type": "prop",
    "frame": "pc",
-   "x": 112,
-   "y": 104
+   "x": 80,
+   "y": 88
   },
   {
    "id": "projects.item.1-0",
    "type": "interactable",
    "contentId": "projects.item.1",
-   "x": 112,
-   "y": 112
+   "x": 80,
+   "y": 96
   },
   {
    "id": "desk-1",
    "type": "prop",
    "frame": "table",
-   "x": 96,
-   "y": 122
+   "x": 64,
+   "y": 106
   },
   {
    "id": "projects.item.2-art",
    "type": "prop",
    "frame": "pc",
-   "x": 176,
-   "y": 104
+   "x": 160,
+   "y": 88
   },
   {
    "id": "projects.item.2-0",
    "type": "interactable",
    "contentId": "projects.item.2",
-   "x": 176,
-   "y": 112
+   "x": 160,
+   "y": 96
   },
   {
    "id": "desk-2",
    "type": "prop",
    "frame": "table",
-   "x": 160,
-   "y": 122
+   "x": 144,
+   "y": 106
+  },
+  {
+   "id": "projects.item.3-art",
+   "type": "prop",
+   "frame": "pc",
+   "x": 208,
+   "y": 88
+  },
+  {
+   "id": "projects.item.3-0",
+   "type": "interactable",
+   "contentId": "projects.item.3",
+   "x": 208,
+   "y": 96
+  },
+  {
+   "id": "desk-3",
+   "type": "prop",
+   "frame": "table",
+   "x": 192,
+   "y": 106
   },
   {
    "id": "npc-projects.intro",
@@ -137,16 +158,16 @@
    "sprite": "npc-professor",
    "contentId": "projects.intro",
    "x": 176,
-   "y": 160,
+   "y": 176,
    "facing": "left",
    "movement": "lookAround"
   },
   {
-   "id": "plant-1-10",
+   "id": "plant-1-11",
    "type": "prop",
    "frame": "plant",
    "x": 16,
-   "y": 152
+   "y": 168
   },
   {
    "id": "plant-13-5",

@@ -149,6 +149,42 @@ save('ui/btn-a.png', U.roundButton('A'));
 save('ui/btn-b.png', U.roundButton('B'));
 
 // ---------------------------------------------------------------------------
+// Favicons — the player's own sprite, so the tab icon matches the game.
+// ---------------------------------------------------------------------------
+function nearestScale(src, z) {
+  const out = new Bitmap(src.width * z, src.height * z);
+  for (let y = 0; y < out.height; y++) {
+    for (let x = 0; x < out.width; x++) out.put(x, y, src.get(Math.floor(x / z), Math.floor(y / z)));
+  }
+  return out;
+}
+
+/** Player head on a grass tile, so the icon reads at 16px in a browser tab. */
+function faviconBase() {
+  const sheet = buildCharacter(CHARACTERS.player.opts, false);
+  // Frame 0 is the down-facing neutral pose; content starts 4 rows down and the
+  // head occupies cols 2-13, rows 4-15.
+  const head = sheet.sub(2, 4, 12, 12);
+  const b = new Bitmap(16, 16);
+  b.fill(0, 0, 16, 16, PAL.grass);
+  b.rect(0, 0, 16, 16, PAL.grassDeep);
+  b.fill(1, 1, 14, 1, PAL.grassLight);
+  b.blit(head, 2, 3);
+  return b;
+}
+
+const fav = faviconBase();
+function saveRoot(rel, bmp) {
+  const file = path.join(ROOT, 'public', rel);
+  bmp.save(file);
+  written.push({ rel: `../${rel}`, w: bmp.width, h: bmp.height, bytes: fs.statSync(file).size });
+}
+saveRoot('favicon-16.png', fav);
+saveRoot('favicon-32.png', nearestScale(fav, 2));
+saveRoot('favicon.png', nearestScale(fav, 4));
+saveRoot('apple-touch-icon.png', nearestScale(fav, 12));
+
+// ---------------------------------------------------------------------------
 // Fonts
 // ---------------------------------------------------------------------------
 const main = buildFont('font-main', { shadow: true });

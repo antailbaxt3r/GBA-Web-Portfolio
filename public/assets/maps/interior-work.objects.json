@@ -34,7 +34,8 @@
    "type": "prop",
    "frame": "platform",
    "x": 48,
-   "y": 96
+   "y": 96,
+   "depth": 2
   },
   {
    "id": "npc-work.role.1",
@@ -51,7 +52,8 @@
    "type": "prop",
    "frame": "platform",
    "x": 192,
-   "y": 128
+   "y": 128,
+   "depth": 2
   },
   {
    "id": "npc-work.role.2",
@@ -68,7 +70,8 @@
    "type": "prop",
    "frame": "platform",
    "x": 48,
-   "y": 176
+   "y": 176,
+   "depth": 2
   },
   {
    "id": "work.skills-art",
@@ -92,17 +95,31 @@
    "y": 48
   },
   {
-   "id": "work.education-art",
+   "id": "work.education.0-art",
    "type": "prop",
    "frame": "certificate",
-   "x": 192,
+   "x": 176,
    "y": 40
   },
   {
-   "id": "work.education-0",
+   "id": "work.education.0-0",
    "type": "interactable",
-   "contentId": "work.education",
-   "x": 192,
+   "contentId": "work.education.0",
+   "x": 176,
+   "y": 48
+  },
+  {
+   "id": "work.education.1-art",
+   "type": "prop",
+   "frame": "certificate",
+   "x": 208,
+   "y": 40
+  },
+  {
+   "id": "work.education.1-0",
+   "type": "interactable",
+   "contentId": "work.education.1",
+   "x": 208,
    "y": 48
   },
   {
