@@ -1,0 +1,138 @@
+{
+ "name": "interior-about",
+ "width": 12,
+ "height": 10,
+ "objects": [
+  {
+   "id": "exit",
+   "type": "door",
+   "x": 96,
+   "y": 144,
+   "target": "town",
+   "targetSpawn": "from-about",
+   "transition": "door"
+  },
+  {
+   "id": "entry",
+   "type": "spawn",
+   "x": 96,
+   "y": 128,
+   "facing": "up"
+  },
+  {
+   "id": "about.bed-art",
+   "type": "prop",
+   "frame": "bed",
+   "x": 16,
+   "y": 32
+  },
+  {
+   "id": "about.bed-0",
+   "type": "interactable",
+   "contentId": "about.bed",
+   "x": 16,
+   "y": 48
+  },
+  {
+   "id": "about.bookshelf-art",
+   "type": "prop",
+   "frame": "bookshelf",
+   "x": 48,
+   "y": 32
+  },
+  {
+   "id": "about.bookshelf-0",
+   "type": "interactable",
+   "contentId": "about.bookshelf",
+   "x": 48,
+   "y": 48
+  },
+  {
+   "id": "about.photo-art",
+   "type": "prop",
+   "frame": "photo",
+   "x": 80,
+   "y": 40
+  },
+  {
+   "id": "about.photo-0",
+   "type": "interactable",
+   "contentId": "about.photo",
+   "x": 80,
+   "y": 48
+  },
+  {
+   "id": "about.tv.0-art",
+   "type": "prop",
+   "frame": "tv",
+   "x": 112,
+   "y": 44
+  },
+  {
+   "id": "about.tv.0-0",
+   "type": "interactable",
+   "contentId": "about.tv.0",
+   "x": 112,
+   "y": 48
+  },
+  {
+   "id": "about.tv.0-1",
+   "type": "interactable",
+   "contentId": "about.tv.0",
+   "x": 128,
+   "y": 48
+  },
+  {
+   "id": "about.plant-art",
+   "type": "prop",
+   "frame": "plant",
+   "x": 160,
+   "y": 40
+  },
+  {
+   "id": "about.plant-0",
+   "type": "interactable",
+   "contentId": "about.plant",
+   "x": 160,
+   "y": 48
+  },
+  {
+   "id": "table-3-6",
+   "type": "prop",
+   "frame": "table",
+   "x": 48,
+   "y": 96
+  },
+  {
+   "id": "about.trainercard-art",
+   "type": "prop",
+   "frame": "pc",
+   "x": 144,
+   "y": 88
+  },
+  {
+   "id": "about.trainercard-0",
+   "type": "interactable",
+   "contentId": "about.trainercard",
+   "x": 144,
+   "y": 96
+  },
+  {
+   "id": "rug-5-7",
+   "type": "prop",
+   "frame": "rug",
+   "x": 80,
+   "y": 112
+  },
+  {
+   "id": "npc-about.photo",
+   "type": "npc",
+   "sprite": "npc-townsfolk-b",
+   "contentId": "about.arjun",
+   "x": 16,
+   "y": 112,
+   "facing": "right",
+   "movement": "lookAround"
+  }
+ ]
+}

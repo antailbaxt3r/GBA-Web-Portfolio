@@ -1,0 +1,27 @@
+{
+  "name": "portfolio-2026",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A GBA Pokemon FireRed-style interactive web portfolio",
+  "scripts": {
+    "assets": "node tools/generate-assets.mjs",
+    "assets:preview": "node tools/build-preview.mjs",
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "maps": "node tools/generate-maps.mjs",
+    "audio": "node tools/generate-audio.mjs",
+    "validate": "node tools/validate.mjs",
+    "assets:all": "npm run assets && npm run maps && npm run audio && npm run validate"
+  },
+  "dependencies": {
+    "easystarjs": "^0.4.4",
+    "phaser": "^4.2.1"
+  },
+  "devDependencies": {
+    "opentype.js": "^2.0.0",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.5"
+  }
+}

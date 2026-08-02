@@ -1,0 +1,9 @@
+node_modules
+dist
+.DS_Store
+*.local
+.vite
+
+# FireRed reference sheets — visual reference only.
+# NEVER committed, NEVER bundled, NEVER deployed. See PRD.md section 3.
+/reference

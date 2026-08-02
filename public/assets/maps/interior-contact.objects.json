@@ -1,0 +1,96 @@
+{
+ "name": "interior-contact",
+ "width": 13,
+ "height": 11,
+ "objects": [
+  {
+   "id": "exit",
+   "type": "door",
+   "x": 96,
+   "y": 160,
+   "target": "town",
+   "targetSpawn": "from-contact",
+   "transition": "door"
+  },
+  {
+   "id": "entry",
+   "type": "spawn",
+   "x": 96,
+   "y": 144,
+   "facing": "up"
+  },
+  {
+   "id": "counter",
+   "type": "prop",
+   "frame": "counter",
+   "x": 64,
+   "y": 80
+  },
+  {
+   "id": "npc-contact.clerk",
+   "type": "npc",
+   "sprite": "npc-clerk",
+   "contentId": "contact.clerk",
+   "x": 80,
+   "y": 64,
+   "facing": "down",
+   "movement": "static"
+  },
+  {
+   "id": "contact.mailbox-art",
+   "type": "prop",
+   "frame": "mailbox",
+   "x": 32,
+   "y": 120
+  },
+  {
+   "id": "contact.mailbox-0",
+   "type": "interactable",
+   "contentId": "contact.mailbox",
+   "x": 32,
+   "y": 128
+  },
+  {
+   "id": "contact.shelf-art",
+   "type": "prop",
+   "frame": "bookshelf",
+   "x": 144,
+   "y": 32
+  },
+  {
+   "id": "contact.shelf-0",
+   "type": "interactable",
+   "contentId": "contact.shelf",
+   "x": 144,
+   "y": 48
+  },
+  {
+   "id": "bookshelf-10-3",
+   "type": "prop",
+   "frame": "bookshelf",
+   "x": 160,
+   "y": 32
+  },
+  {
+   "id": "plant-1-9",
+   "type": "prop",
+   "frame": "plant",
+   "x": 16,
+   "y": 136
+  },
+  {
+   "id": "plant-11-9",
+   "type": "prop",
+   "frame": "plant",
+   "x": 176,
+   "y": 136
+  },
+  {
+   "id": "rug-8-7",
+   "type": "prop",
+   "frame": "rug",
+   "x": 128,
+   "y": 112
+  }
+ ]
+}

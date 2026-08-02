@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+    <meta name="theme-color" content="#101018" />
+    <!--HEAD-->
+    <style>
+      /* Paint black on the very first frame so there is never a white flash. */
+      :root { color-scheme: dark; }
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background: #101018;
+        color: #e8e8f0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        overflow: hidden;
+        overscroll-behavior: none;
+      }
+
+      #game-root {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        touch-action: none;
+      }
+      #game-root canvas {
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
+        display: block;
+        touch-action: none;
+        outline: none;
+      }
+      #game-root canvas:focus-visible { outline: 2px solid #88c0e8; outline-offset: 4px; }
+
+      /* Boot splash: visible before any JS parses, hidden once Phaser is ready. */
+      #boot-splash {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        background: #101018;
+        z-index: 50;
+        transition: opacity 0.3s ease;
+      }
+      #boot-splash span {
+        font: 600 12px/1 ui-monospace, monospace;
+        letter-spacing: 0.25em;
+        color: #4890d8;
+        animation: pulse 1.2s ease-in-out infinite;
+      }
+      @keyframes pulse { 0%, 100% { opacity: 0.35 } 50% { opacity: 1 } }
+      .game-ready #boot-splash { opacity: 0; pointer-events: none; }
+
+      /* Screen-reader-only, but still in the accessibility tree and crawlable.
+         display:none would remove it from both. */
+      .visually-hidden {
+        position: absolute;
+        width: 1px; height: 1px;
+        margin: -1px; padding: 0;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      #skip-to-text {
+        position: fixed;
+        top: 8px; left: 8px;
+        z-index: 100;
+        padding: 8px 12px;
+        background: #4890d8;
+        color: #fff;
+        border-radius: 4px;
+        font-size: 14px;
+        text-decoration: none;
+        transform: translateY(-200%);
+        transition: transform 0.15s ease;
+      }
+      #skip-to-text:focus { transform: none; }
+
+      /* --- text mode: the full portfolio as an ordinary readable page --- */
+      .text-mode #game-root, .text-mode #boot-splash { display: none; }
+      .text-mode body { overflow: auto; }
+      .text-mode #text-version {
+        position: static;
+        width: auto; height: auto;
+        margin: 0 auto; padding: 32px 20px 64px;
+        max-width: 68ch;
+        clip: auto;
+        clip-path: none;
+        white-space: normal;
+        overflow: visible;
+        line-height: 1.6;
+      }
+      #text-version h1 { font-size: 2rem; margin: 0 0 4px; }
+      #text-version h2 {
+        font-size: 1.3rem;
+        margin: 40px 0 8px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid #303040;
+      }
+      #text-version h3 { font-size: 1.05rem; margin: 24px 0 2px; }
+      #text-version .role, #text-version .dates, #text-version .tech, #text-version .year {
+        color: #9aa0b4; font-size: 0.9rem; margin: 2px 0;
+      }
+      #text-version a { color: #88c0e8; }
+      #text-version ul { margin: 8px 0; padding-left: 20px; }
+      #text-version footer { margin-top: 48px; color: #7a8098; font-size: 0.85rem; }
+      .mirror-back { display: inline-block; margin-bottom: 16px; color: #88c0e8; }
+      html:not(.text-mode) .mirror-back { display: none; }
+
+      @media (prefers-reduced-motion: reduce) {
+        #boot-splash span { animation: none; opacity: 0.8; }
+      }
+    </style>
+  </head>
+  <body>
+    <a href="#text-version" id="skip-to-text">Skip the game &ndash; view as text</a>
+
+    <div id="boot-splash"><span>LOADING</span></div>
+    <div id="game-root" role="application" aria-label="Portfolio Town, an explorable pixel-art portfolio"></div>
+
+    <!-- Dialogue is mirrored here so the game is playable with a screen reader. -->
+    <div id="a11y-live" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Complete portfolio as semantic HTML. Generated from src/data/content.ts
+         at build time by the staticMirror plugin in vite.config.ts. -->
+    <main id="text-version" class="visually-hidden" tabindex="-1"><!--MIRROR--></main>
+
+    <noscript>
+      <style>
+        #game-root, #boot-splash, #skip-to-text { display: none !important; }
+        #text-version {
+          position: static; width: auto; height: auto; clip: auto; clip-path: none;
+          margin: 0 auto; padding: 32px 20px; max-width: 68ch; white-space: normal;
+          overflow: visible; line-height: 1.6;
+        }
+        body { overflow: auto; }
+      </style>
+    </noscript>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

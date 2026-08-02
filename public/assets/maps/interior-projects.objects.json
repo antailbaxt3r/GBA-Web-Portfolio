@@ -1,0 +1,159 @@
+{
+ "name": "interior-projects",
+ "width": 15,
+ "height": 12,
+ "objects": [
+  {
+   "id": "exit",
+   "type": "door",
+   "x": 112,
+   "y": 176,
+   "target": "town",
+   "targetSpawn": "from-projects",
+   "transition": "door"
+  },
+  {
+   "id": "entry",
+   "type": "spawn",
+   "x": 112,
+   "y": 160,
+   "facing": "up"
+  },
+  {
+   "id": "bookshelf-2-3",
+   "type": "prop",
+   "frame": "bookshelf",
+   "x": 32,
+   "y": 32
+  },
+  {
+   "id": "bookshelf-3-3",
+   "type": "prop",
+   "frame": "bookshelf",
+   "x": 48,
+   "y": 32
+  },
+  {
+   "id": "bookshelf-11-3",
+   "type": "prop",
+   "frame": "bookshelf",
+   "x": 176,
+   "y": 32
+  },
+  {
+   "id": "bookshelf-12-3",
+   "type": "prop",
+   "frame": "bookshelf",
+   "x": 192,
+   "y": 32
+  },
+  {
+   "id": "projects.intro-art",
+   "type": "prop",
+   "frame": "lab-machine",
+   "x": 96,
+   "y": 32
+  },
+  {
+   "id": "projects.intro-0",
+   "type": "interactable",
+   "contentId": "projects.intro",
+   "x": 96,
+   "y": 48
+  },
+  {
+   "id": "projects.intro-1",
+   "type": "interactable",
+   "contentId": "projects.intro",
+   "x": 112,
+   "y": 48
+  },
+  {
+   "id": "projects.item.0-art",
+   "type": "prop",
+   "frame": "pc",
+   "x": 48,
+   "y": 104
+  },
+  {
+   "id": "projects.item.0-0",
+   "type": "interactable",
+   "contentId": "projects.item.0",
+   "x": 48,
+   "y": 112
+  },
+  {
+   "id": "desk-0",
+   "type": "prop",
+   "frame": "table",
+   "x": 32,
+   "y": 122
+  },
+  {
+   "id": "projects.item.1-art",
+   "type": "prop",
+   "frame": "pc",
+   "x": 112,
+   "y": 104
+  },
+  {
+   "id": "projects.item.1-0",
+   "type": "interactable",
+   "contentId": "projects.item.1",
+   "x": 112,
+   "y": 112
+  },
+  {
+   "id": "desk-1",
+   "type": "prop",
+   "frame": "table",
+   "x": 96,
+   "y": 122
+  },
+  {
+   "id": "projects.item.2-art",
+   "type": "prop",
+   "frame": "pc",
+   "x": 176,
+   "y": 104
+  },
+  {
+   "id": "projects.item.2-0",
+   "type": "interactable",
+   "contentId": "projects.item.2",
+   "x": 176,
+   "y": 112
+  },
+  {
+   "id": "desk-2",
+   "type": "prop",
+   "frame": "table",
+   "x": 160,
+   "y": 122
+  },
+  {
+   "id": "npc-projects.intro",
+   "type": "npc",
+   "sprite": "npc-professor",
+   "contentId": "projects.intro",
+   "x": 176,
+   "y": 160,
+   "facing": "left",
+   "movement": "lookAround"
+  },
+  {
+   "id": "plant-1-10",
+   "type": "prop",
+   "frame": "plant",
+   "x": 16,
+   "y": 152
+  },
+  {
+   "id": "plant-13-5",
+   "type": "prop",
+   "frame": "plant",
+   "x": 208,
+   "y": 72
+  }
+ ]
+}

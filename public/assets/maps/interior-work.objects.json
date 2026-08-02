@@ -1,0 +1,147 @@
+{
+ "name": "interior-work",
+ "width": 16,
+ "height": 14,
+ "objects": [
+  {
+   "id": "exit",
+   "type": "door",
+   "x": 128,
+   "y": 208,
+   "target": "town",
+   "targetSpawn": "from-work",
+   "transition": "door"
+  },
+  {
+   "id": "entry",
+   "type": "spawn",
+   "x": 128,
+   "y": 192,
+   "facing": "up"
+  },
+  {
+   "id": "npc-work.role.0",
+   "type": "npc",
+   "sprite": "npc-trainer",
+   "contentId": "work.role.0",
+   "x": 48,
+   "y": 80,
+   "facing": "down",
+   "movement": "static"
+  },
+  {
+   "id": "plat-0",
+   "type": "prop",
+   "frame": "platform",
+   "x": 48,
+   "y": 96
+  },
+  {
+   "id": "npc-work.role.1",
+   "type": "npc",
+   "sprite": "npc-trainer",
+   "contentId": "work.role.1",
+   "x": 192,
+   "y": 112,
+   "facing": "down",
+   "movement": "static"
+  },
+  {
+   "id": "plat-1",
+   "type": "prop",
+   "frame": "platform",
+   "x": 192,
+   "y": 128
+  },
+  {
+   "id": "npc-work.role.2",
+   "type": "npc",
+   "sprite": "npc-trainer",
+   "contentId": "work.role.2",
+   "x": 48,
+   "y": 160,
+   "facing": "down",
+   "movement": "static"
+  },
+  {
+   "id": "plat-2",
+   "type": "prop",
+   "frame": "platform",
+   "x": 48,
+   "y": 176
+  },
+  {
+   "id": "work.skills-art",
+   "type": "prop",
+   "frame": "trophy-case",
+   "x": 32,
+   "y": 32
+  },
+  {
+   "id": "work.skills-0",
+   "type": "interactable",
+   "contentId": "work.skills",
+   "x": 32,
+   "y": 48
+  },
+  {
+   "id": "work.skills-1",
+   "type": "interactable",
+   "contentId": "work.skills",
+   "x": 48,
+   "y": 48
+  },
+  {
+   "id": "work.education-art",
+   "type": "prop",
+   "frame": "certificate",
+   "x": 192,
+   "y": 40
+  },
+  {
+   "id": "work.education-0",
+   "type": "interactable",
+   "contentId": "work.education",
+   "x": 192,
+   "y": 48
+  },
+  {
+   "id": "bookshelf-5-3",
+   "type": "prop",
+   "frame": "bookshelf",
+   "x": 80,
+   "y": 32
+  },
+  {
+   "id": "bookshelf-10-3",
+   "type": "prop",
+   "frame": "bookshelf",
+   "x": 160,
+   "y": 32
+  },
+  {
+   "id": "npc-work.intro",
+   "type": "npc",
+   "sprite": "npc-clerk",
+   "contentId": "work.intro",
+   "x": 160,
+   "y": 192,
+   "facing": "left",
+   "movement": "lookAround"
+  },
+  {
+   "id": "plant-1-12",
+   "type": "prop",
+   "frame": "plant",
+   "x": 16,
+   "y": 184
+  },
+  {
+   "id": "plant-14-12",
+   "type": "prop",
+   "frame": "plant",
+   "x": 224,
+   "y": 184
+  }
+ ]
+}
