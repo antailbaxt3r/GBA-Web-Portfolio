@@ -213,8 +213,8 @@ const nodes: ContentNode[] = [
     title: 'TOWN SIGN',
     pages: [
       'WELCOME TO PORTFOLIO TOWN!',
-      'Use ARROW keys to walk. Or click to walk to a spot.',
-      'Press Z or ENTER to read things.',
+      'Tap or click anywhere to walk there.',
+      'Tap a thing to read it. ARROWS and Z work too.',
       'Four buildings. Four sections. Go look.',
     ],
   },
@@ -270,7 +270,7 @@ const nodes: ContentNode[] = [
     pages: [
       'Welcome to the LAB. Every machine here',
       'runs one of the projects ARJUN has built.',
-      'Press Z at a PC to read about it.',
+      'Tap a PC to read about it.',
     ],
   },
   {

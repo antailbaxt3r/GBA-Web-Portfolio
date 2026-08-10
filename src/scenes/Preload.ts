@@ -44,9 +44,6 @@ export class Preload extends Phaser.Scene {
 
     // --- standalone UI ---
     this.load.spritesheet('reticle', 'ui/reticle.png', { frameWidth: 16, frameHeight: 16 });
-    this.load.image('dpad', 'ui/dpad.png');
-    this.load.image('btn-a', 'ui/btn-a.png');
-    this.load.image('btn-b', 'ui/btn-b.png');
     this.load.image('title-emblem', 'ui/title-emblem.png');
 
     // --- maps ---

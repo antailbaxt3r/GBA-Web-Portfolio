@@ -1,14 +1,12 @@
 import Phaser from 'phaser';
 import { DialogueBox } from '../ui/DialogueBox';
 import { ChoiceMenu } from '../ui/ChoiceMenu';
-import { TouchControls } from '../ui/TouchControls';
 import { EventBus, Events, type SectionVisitedPayload } from '../systems/EventBus';
 import { InputController } from '../systems/InputController';
 import { SaveState } from '../systems/SaveState';
 import { Audio } from '../systems/AudioManager';
 import { CONTENT, type Choice } from '../data/content';
 import { VIEW_W } from '../data/maps';
-import { World } from './World';
 
 /**
  * Always-on-top UI. Runs in parallel with World and communicates only over the
@@ -19,7 +17,6 @@ export class UIScene extends Phaser.Scene {
 
   private box!: DialogueBox;
   private menu!: ChoiceMenu;
-  private touch!: TouchControls;
   private ctl!: InputController;
   private hud!: Phaser.GameObjects.BitmapText;
   private toast?: Phaser.GameObjects.BitmapText;
@@ -32,7 +29,6 @@ export class UIScene extends Phaser.Scene {
   create(): void {
     this.box = new DialogueBox(this);
     this.menu = new ChoiceMenu(this);
-    this.touch = new TouchControls(this);
     this.ctl = new InputController(this);
     Audio.attach(this);
 
@@ -48,9 +44,14 @@ export class UIScene extends Phaser.Scene {
     this.menu.onSelect = (choice) => this.runChoice(choice);
     this.menu.onCancel = () => this.closeDialogue();
 
-    this.touch.onDirection = (dir) => this.getWorldInput()?.setTouchDirection(dir);
-    this.touch.onA = () => this.getWorldInput()?.pressTouch('confirm');
-    this.touch.onB = () => this.getWorldInput()?.pressTouch('cancel');
+    // Tap anywhere to advance. This is the only way to read dialogue on a
+    // touchscreen, so it is registered on the scene rather than on a game
+    // object: any tap counts, not just one that lands on the text box.
+    //
+    // The press is latched and consumed in update() rather than acted on here,
+    // so a tap that closes the box cannot also be seen by World's click-to-move
+    // handler as a tap on open ground.
+    this.input.on(Phaser.Input.Events.POINTER_DOWN, this.onPointerDown, this);
 
     EventBus.on(Events.InteractionStart, this.openDialogue, this);
     EventBus.on(Events.SectionVisited, this.onSectionVisited, this);
@@ -58,14 +59,18 @@ export class UIScene extends Phaser.Scene {
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       EventBus.off(Events.InteractionStart, this.openDialogue, this);
       EventBus.off(Events.SectionVisited, this.onSectionVisited, this);
+      this.input.off(Phaser.Input.Events.POINTER_DOWN, this.onPointerDown, this);
       this.ctl.destroy();
     });
   }
 
-  /** Touch input is routed into the World scene's controller. */
-  private getWorldInput(): InputController | null {
-    const world = this.scene.get(World.KEY) as World | undefined;
-    return (world as unknown as { ctl?: InputController })?.ctl ?? null;
+  private onPointerDown(): void {
+    if (!this.box.isOpen) return;
+    // With the menu up the rows handle their own taps, and a tap anywhere else
+    // does nothing — it must not fire whichever option the cursor happens to
+    // be sitting on.
+    if (this.menu.isOpen) return;
+    this.ctl.pressTouch('confirm');
   }
 
   // -------------------------------------------------------------------------
@@ -83,7 +88,6 @@ export class UIScene extends Phaser.Scene {
     this.box.show(withTitle);
     // The keypress that opened this dialogue must not also skip its first page.
     this.suppressUntil = this.time.now + 150;
-    this.touch.setDialogueMode(true);
     EventBus.emit(Events.DialogueOpen, contentId);
   }
 
@@ -91,7 +95,6 @@ export class UIScene extends Phaser.Scene {
     this.box.hide();
     this.menu.hide();
     this.awaitingChoices = null;
-    this.touch.setDialogueMode(false);
     EventBus.emit(Events.DialogueClose);
   }
 

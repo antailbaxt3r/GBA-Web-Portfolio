@@ -214,9 +214,6 @@ function contactSheet() {
   drawText(sheet, fontMain, 'ABCDEFGHIJKLM abcdefghijklm 0123456789', 260, y + 4);
   drawText(sheet, fontMain, 'NOPQRSTUVWXYZ nopqrstuvwxyz .,!?:;-()', 260, y + 20);
   drawText(sheet, fontMain, '▶ SELECT   ▼ MORE   ♪ MUSIC   @#%&+=/*', 260, y + 36);
-  sheet.blit(scale(load('ui/dpad.png'), 1), 760, y);
-  sheet.blit(scale(load('ui/btn-a.png'), 1), 830, y + 16);
-  sheet.blit(scale(load('ui/btn-b.png'), 1), 862, y + 16);
   sheet.blit(scale(load('ui/title-emblem.png'), 1), 900, y);
   sheet.blit(scale(load('boot/spinner.png'), 2), 960, y);
   y += 70;

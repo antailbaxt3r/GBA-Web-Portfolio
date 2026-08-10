@@ -37,15 +37,21 @@ npm run dev            # http://localhost:5173
 
 ## Controls
 
-| | Keyboard | Touch |
+| | Keyboard | Pointer / touch |
 |---|---|---|
-| Move | Arrows **or** WASD | D-pad, or tap anywhere to walk there |
-| Run | Shift or X | hold B |
-| Talk / confirm | Z, Enter or Space | A, or tap the object |
-| Back / cancel | X, Esc or Backspace | B |
+| Move | Arrows **or** WASD | Tap anywhere to walk there |
+| Run | Shift or X | — |
+| Talk / confirm | Z, Enter or Space | Tap the object |
+| Advance dialogue | Z, Enter or Space | Tap anywhere |
+| Choose an option | Arrows + Z | Tap the row |
+| Back / cancel | X, Esc or Backspace | Tap the BACK / CANCEL row |
 
 Clicking an object walks the character to it and reads it automatically. A
 keypress always cancels an in-progress click-path, on the next tile boundary.
+
+There is no on-screen D-pad or A/B overlay. A touchscreen already has a
+pointer, and the overlay covered a third of a phone viewport to duplicate
+input the screen accepts directly.
 
 ---
 
@@ -65,7 +71,7 @@ tools/
     chars.mjs      16x24 character sprites, 4 hairstyles, walk + run
     tiles.mjs      terrain and interior tilesets, edge auto-tiling
     props.mjs      buildings, trees, furniture
-    ui.mjs         window frames, cursors, touch controls, spinner
+    ui.mjs         window frames, cursors, spinner, transition masks
     font.mjs       TTF -> BMFont rasteriser
   generate-assets.mjs   orchestrates the above, packs the atlas
   generate-maps.mjs     town + interiors as Tiled JSON + object manifests

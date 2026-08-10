@@ -52,6 +52,22 @@ export class ChoiceMenu {
       this.container.add(t);
     });
 
+    // Rows are tappable. Without this a touchscreen has no way to reach any
+    // option but the first, since there is no D-pad to move the cursor with.
+    // The hit area is grown to the full row height so a thumb-sized target
+    // exists either side of the glyphs.
+    this.labels.forEach((t, i) => {
+      t.setInteractive(
+        new Phaser.Geom.Rectangle(-PAD, -3, maxW + PAD * 2, ROW_H),
+        Phaser.Geom.Rectangle.Contains
+      );
+      t.on('pointerover', () => this.moveTo(i));
+      t.on('pointerdown', () => {
+        this.moveTo(i);
+        this.confirm();
+      });
+    });
+
     const w = Math.max(64, maxW + PAD * 2 + 6);
     const h = choices.length * ROW_H + PAD + 2;
     this.frame.setSize(w, h);
@@ -73,6 +89,14 @@ export class ChoiceMenu {
   move(delta: number): void {
     if (!this.open || !this.choices.length) return;
     this.index = (this.index + delta + this.choices.length) % this.choices.length;
+    this.updateCursor();
+    Audio.play('sfx-select', 0.3);
+  }
+
+  /** Point the cursor at a specific row, as a hover or a tap does. */
+  private moveTo(index: number): void {
+    if (!this.open || index === this.index) return;
+    this.index = index;
     this.updateCursor();
     Audio.play('sfx-select', 0.3);
   }

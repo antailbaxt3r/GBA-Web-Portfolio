@@ -52,9 +52,7 @@ for (const file of walk(ASSETS)) {
       if (v % 8 !== 0) badColour.add(v);
     }
   }
-  // The touch controls are deliberately translucent overlays, not pixel art.
-  const translucentOk = /ui\/(dpad|btn-)/.test(rel);
-  if (badAlpha.size && !translucentOk) {
+  if (badAlpha.size) {
     errors.push(`${rel}: ${badAlpha.size} partial alpha value(s), e.g. ${[...badAlpha][0]}`);
   }
   if (badColour.size) {

@@ -15,8 +15,6 @@ export class InputController {
   private held = new Set<Direction>();
   /** Direction press order; the most recent wins, so diagonals resolve cleanly. */
   private order: Direction[] = [];
-  private touchDir: Direction | null = null;
-  private touchRun = false;
   private justPressed = new Set<Intent>();
   private locked = false;
 
@@ -89,22 +87,11 @@ export class InputController {
   clear(): void {
     this.held.clear();
     this.order.length = 0;
-    this.touchDir = null;
-    this.touchRun = false;
     this.justPressed.clear();
     this.dirPressed = false;
   }
 
-  /** Called by the on-screen D-pad. */
-  setTouchDirection(dir: Direction | null): void {
-    this.touchDir = dir;
-  }
-
-  setTouchRun(v: boolean): void {
-    this.touchRun = v;
-  }
-
-  /** Called by the on-screen A/B buttons. */
+  /** Raise an intent from a source other than the keyboard — a screen tap. */
   pressTouch(intent: Intent): void {
     this.justPressed.add(intent);
   }
@@ -112,7 +99,6 @@ export class InputController {
   /** The direction currently being requested, or null. */
   direction(): Direction | null {
     if (this.locked) return null;
-    if (this.touchDir) return this.touchDir;
 
     this.held.clear();
     if (this.keys.up?.isDown || this.keys.w?.isDown) this.held.add('up');
@@ -131,7 +117,7 @@ export class InputController {
 
   isRunning(): boolean {
     if (this.locked) return false;
-    return this.touchRun || !!this.keys.shift?.isDown || !!this.keys.x?.isDown;
+    return !!this.keys.shift?.isDown || !!this.keys.x?.isDown;
   }
 
   /** Edge-triggered. Consumes the press. */

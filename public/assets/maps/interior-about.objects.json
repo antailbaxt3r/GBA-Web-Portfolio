@@ -129,7 +129,7 @@
    "id": "npc-about.photo",
    "type": "npc",
    "sprite": "npc-townsfolk-b",
-   "contentId": "about.photo",
+   "contentId": "about.arjun",
    "x": 16,
    "y": 112,
    "facing": "right",

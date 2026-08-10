@@ -44,30 +44,35 @@ if (import.meta.env.DEV) {
 }
 
 // ---------------------------------------------------------------------------
-// Integer-only upscaling.
+// Upscaling.
 //
-// Scale.FIT alone produces fractional scale factors, which makes pixel art
-// shimmer. Snap the canvas to the largest whole multiple that fits; below 2x,
-// fall back to fractional scaling because legibility beats crispness there.
+// Fill the window: take the largest factor that still fits both axes. The game
+// is a fixed 3:2 framebuffer, so on any wider screen one axis fills completely
+// and the other letterboxes against the page background — that is as full as
+// this can get without either cropping the view or changing what the camera
+// shows.
+//
+// This deliberately allows a fractional factor. Snapping down to a whole
+// multiple keeps every game pixel exactly equal in size, but 1080px of height
+// is 6.75 tiles' worth of scale and flooring it to 6 throws away 11% of the
+// screen. Uneven pixel widths are static and barely visible at these
+// magnifications; a permanent black border is not.
 // ---------------------------------------------------------------------------
-function applyIntegerScale(): void {
+function applyScale(): void {
   if (!game.scale) return;
-  const availW = window.innerWidth;
-  const availH = window.innerHeight;
-  const fit = Math.min(availW / VIEW_W, availH / VIEW_H);
-  // Below 2x, legibility beats crispness, so allow a fractional factor there.
-  const zoom = fit >= 2 ? Math.min(8, Math.floor(fit)) : Math.max(0.5, fit);
+  const fit = Math.min(window.innerWidth / VIEW_W, window.innerHeight / VIEW_H);
+  const zoom = Math.max(0.5, fit);
   if (game.scale.zoom !== zoom) game.scale.setZoom(zoom);
 }
 
 let resizeTimer = 0;
 function scheduleScale(): void {
   window.clearTimeout(resizeTimer);
-  resizeTimer = window.setTimeout(applyIntegerScale, 100);
+  resizeTimer = window.setTimeout(applyScale, 100);
 }
 
 game.events.once(Phaser.Core.Events.READY, () => {
-  applyIntegerScale();
+  applyScale();
   document.documentElement.classList.add('game-ready');
 });
 window.addEventListener('resize', scheduleScale);
@@ -96,7 +101,7 @@ document.getElementById('skip-to-text')?.addEventListener('click', (e) => {
 document.getElementById('back-to-game')?.addEventListener('click', (e) => {
   e.preventDefault();
   document.documentElement.classList.remove('text-mode');
-  applyIntegerScale();
+  applyScale();
 });
 
 export default game;

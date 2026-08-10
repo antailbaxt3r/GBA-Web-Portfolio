@@ -24,6 +24,9 @@ interface WorldInit {
 
 const KEY_TO_INDEX = (x: number, y: number) => `${x},${y}`;
 
+/** How long taps are ignored after a dialogue closes. See onPointerDown. */
+const CLICK_AFTER_DIALOGUE_MS = 250;
+
 export class World extends Phaser.Scene {
   static readonly KEY = 'World';
 
@@ -49,6 +52,7 @@ export class World extends Phaser.Scene {
   private hint?: Phaser.GameObjects.Image;
   private busy = false;
   private dialogueOpen = false;
+  private dialogueClosedAt = 0;
 
   constructor() {
     super(World.KEY);
@@ -251,6 +255,11 @@ export class World extends Phaser.Scene {
 
   private onPointerDown(pointer: Phaser.Input.Pointer): void {
     if (this.busy || this.dialogueOpen) return;
+    // The tap that dismissed a dialogue must not also be read as a tap on the
+    // ground behind it. Both scenes see the same pointer event, and whether
+    // this handler runs before or after UIScene clears `dialogueOpen` is not
+    // something either scene controls.
+    if (this.time.now - this.dialogueClosedAt < CLICK_AFTER_DIALOGUE_MS) return;
     const world = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
     const target = { x: Math.floor(world.x / TILE), y: Math.floor(world.y / TILE) };
     void this.walkTo(target);
@@ -379,6 +388,7 @@ export class World extends Phaser.Scene {
 
   private onDialogueClose(): void {
     this.dialogueOpen = false;
+    this.dialogueClosedAt = this.time.now;
     this.ctl?.setLocked(false);
     this.ctl?.clear();
     for (const n of this.npcs) n.unfreeze();

@@ -55,7 +55,7 @@ export class Title extends Phaser.Scene {
     this.updateCursor();
 
     this.add
-      .bitmapText(cx, VIEW_H - 22, 'font-small', 'ARROWS + ENTER   or   CLICK')
+      .bitmapText(cx, VIEW_H - 22, 'font-small', 'TAP   or   ARROWS + ENTER')
       .setOrigin(0.5, 0)
       .setAlpha(0.7);
 

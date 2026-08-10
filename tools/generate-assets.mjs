@@ -141,12 +141,9 @@ save('ui/reticle.png', reticle);
 save('boot/spinner.png', U.ringSpinner());
 save('ui/title-emblem.png', U.titleEmblem());
 
-// ---------------------------------------------------------------------------
-// Touch controls
-// ---------------------------------------------------------------------------
-save('ui/dpad.png', U.dpadSprite());
-save('ui/btn-a.png', U.roundButton('A'));
-save('ui/btn-b.png', U.roundButton('B'));
+// No on-screen D-pad or A/B buttons. Touch devices tap to walk and tap to
+// advance dialogue, so the overlay was covering a third of a phone screen to
+// duplicate input the screen already accepts.
 
 // ---------------------------------------------------------------------------
 // Favicons — the player's own sprite, so the tab icon matches the game.
