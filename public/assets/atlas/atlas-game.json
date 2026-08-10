@@ -520,9 +520,29 @@
     "h": 16
    }
   },
-  "hint": {
+  "menu-button": {
    "frame": {
     "x": 398,
+    "y": 82,
+    "w": 16,
+    "h": 16
+   },
+   "rotated": false,
+   "trimmed": false,
+   "spriteSourceSize": {
+    "x": 0,
+    "y": 0,
+    "w": 16,
+    "h": 16
+   },
+   "sourceSize": {
+    "w": 16,
+    "h": 16
+   }
+  },
+  "hint": {
+   "frame": {
+    "x": 415,
     "y": 82,
     "w": 8,
     "h": 10
@@ -542,7 +562,7 @@
   },
   "cursor": {
    "frame": {
-    "x": 407,
+    "x": 424,
     "y": 82,
     "w": 8,
     "h": 8
@@ -562,7 +582,7 @@
   },
   "advance-arrow": {
    "frame": {
-    "x": 416,
+    "x": 433,
     "y": 82,
     "w": 8,
     "h": 6

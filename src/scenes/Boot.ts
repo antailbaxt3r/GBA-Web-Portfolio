@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { SaveState } from '../systems/SaveState';
+import { Audio } from '../systems/AudioManager';
 
 /**
  * Loads only what the loading screen itself needs — about 2 KB — so the
@@ -20,7 +21,7 @@ export class Boot extends Phaser.Scene {
 
   create(): void {
     SaveState.load();
-    this.sound.mute = SaveState.get().settings.muted;
+    Audio.attach(this);
     this.scene.start('Preload');
   }
 }

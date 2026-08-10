@@ -45,6 +45,7 @@ npm run dev            # http://localhost:5173
 | Advance dialogue | Z, Enter or Space | Tap anywhere |
 | Choose an option | Arrows + Z | Tap the row |
 | Back / cancel | X, Esc or Backspace | Tap the BACK / CANCEL row |
+| Open the menu | Esc | Tap the button, top left |
 
 Clicking an object walks the character to it and reads it automatically. A
 keypress always cancels an in-progress click-path, on the next tile boundary.
@@ -52,6 +53,18 @@ keypress always cancels an in-progress click-path, on the next tile boundary.
 There is no on-screen D-pad or A/B overlay. A touchscreen already has a
 pointer, and the overlay covered a third of a phone viewport to duplicate
 input the screen accepts directly.
+
+### Pause menu
+
+Escape (or the corner button) opens an overlay with sound on/off, a volume
+slider and an exit back to the title screen. It freezes the World scene while
+open, so nothing moves behind it. Arrows navigate, left/right move the slider,
+and every row is also clickable and tappable.
+
+Volume and mute live in the save file, so they survive a reload. They are
+re-applied when the Web Audio context unlocks on the first gesture — Phaser
+rebuilds its master gain node at that moment and discards anything set before
+it, which otherwise makes a saved volume silently revert to full.
 
 ---
 

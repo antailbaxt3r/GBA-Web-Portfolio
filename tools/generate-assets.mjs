@@ -76,6 +76,7 @@ Object.assign(atlasSources, {
   cursor: U.cursorSprite(),
   'advance-arrow': U.advanceArrow(),
   hint: U.hintIcon(),
+  'menu-button': U.menuButton(),
 });
 
 /** Shelf packer. Sorted by descending height, which is near-optimal for sprites. */

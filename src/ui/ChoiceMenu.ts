@@ -25,7 +25,9 @@ export class ChoiceMenu {
     this.frame = scene.add
       .nineslice(0, 0, 'atlas-game', 'menu-frame', 80, 40, 6, 6, 6, 6)
       .setOrigin(0, 0);
-    this.cursor = scene.add.image(4, 0, 'atlas-game', 'cursor').setOrigin(0, 0);
+    // Origin at the arrow's vertical middle so it lines up with the centre of
+    // the row rather than the top of the glyphs.
+    this.cursor = scene.add.image(4, 0, 'atlas-game', 'cursor').setOrigin(0, 0.5);
     this.container = scene.add
       .container(0, 0, [this.frame, this.cursor])
       .setScrollFactor(0)
@@ -83,7 +85,8 @@ export class ChoiceMenu {
   }
 
   private updateCursor(): void {
-    this.cursor.setPosition(4, PAD - 4 + this.index * ROW_H);
+    const row = this.labels[this.index];
+    if (row) this.cursor.setPosition(4, row.y + row.height / 2);
   }
 
   move(delta: number): void {

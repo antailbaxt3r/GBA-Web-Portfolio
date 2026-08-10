@@ -53,6 +53,7 @@ export class InputController {
       this.order = this.order.filter((d) => d !== dir);
       this.order.push(dir);
       this.dirPressed = true;
+      this.latchedDir = dir;
       return;
     }
     switch (ev.code) {
@@ -68,6 +69,22 @@ export class InputController {
   }
 
   private dirPressed = false;
+  private latchedDir: Direction | null = null;
+
+  /**
+   * The most recent direction *keydown*, consumed on read.
+   *
+   * Menus need this rather than direction(): that one polls `isDown`, so a
+   * press and release inside a single frame never registers. Walking can poll
+   * safely because a step that short would be invisible anyway, but a dropped
+   * menu keystroke reads as the UI ignoring you.
+   */
+  takeDirection(): Direction | null {
+    if (this.locked) return null;
+    const d = this.latchedDir;
+    this.latchedDir = null;
+    return d;
+  }
 
   private codeToDir(code: string): Direction | null {
     switch (code) {
@@ -89,6 +106,7 @@ export class InputController {
     this.order.length = 0;
     this.justPressed.clear();
     this.dirPressed = false;
+    this.latchedDir = null;
   }
 
   /** Raise an intent from a source other than the keyboard — a screen tap. */

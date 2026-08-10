@@ -14,6 +14,8 @@ export interface SaveData {
   seenDialogue: string[];
   settings: {
     muted: boolean;
+    /** Master output level, 0..1. Independent of `muted`, which overrides it. */
+    volume: number;
     textSpeed: TextSpeed;
     showHints: boolean;
   };
@@ -27,7 +29,7 @@ function fresh(): SaveData {
     facing: 'up',
     visited: [],
     seenDialogue: [],
-    settings: { muted: false, textSpeed: 'normal', showHints: true },
+    settings: { muted: false, volume: 0.7, textSpeed: 'normal', showHints: true },
   };
 }
 

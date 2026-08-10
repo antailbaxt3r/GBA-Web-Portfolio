@@ -32,8 +32,18 @@
 # Caching
 #
 # /build/* is content-hashed by Vite, so it can be cached forever.
-# /assets/* keeps stable filenames (the game loads them by path), so it must
-# revalidate or a redeploy would leave visitors on stale art.
+#
+# /assets/* must NOT be. Those filenames are stable — the game loads them by
+# path — and they hold the game's content: the map object manifests carry the
+# dialogue ids, and the atlas image and its JSON manifest only make sense as a
+# matched pair. A max-age here means a deploy that changes any of them leaves
+# visitors reading last week's text, or worse, indexing a new manifest into an
+# old sprite sheet. That is exactly what happened when an NPC's dialogue id was
+# changed and the deployed site kept showing the old one.
+#
+# So: revalidate every time. The whole directory is ~520 KB across 39 files,
+# and an unchanged file costs a 304 with no body. Correctness is worth more
+# here than saving a conditional request on a repeat visit.
 # ---------------------------------------------------------------------------
 [[headers]]
   for = "/build/*"
@@ -43,7 +53,7 @@
 [[headers]]
   for = "/assets/*"
   [headers.values]
-    Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/index.html"

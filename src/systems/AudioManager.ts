@@ -13,6 +13,22 @@ class AudioManagerImpl {
 
   attach(scene: Phaser.Scene): void {
     this.scene = scene;
+    // Phaser's sound manager is global, but a scene starting fresh has no
+    // reason to know that the player turned the volume down three scenes ago.
+    this.applySettings();
+    // The Web Audio context stays locked until the first user gesture, and the
+    // master gain node written to before then is thrown away when Phaser swaps
+    // in the unlocked context. Without this, a saved volume silently reverts to
+    // full the moment the player presses START.
+    scene.sound.once(Phaser.Sound.Events.UNLOCKED, () => this.applySettings());
+  }
+
+  /** Push the saved mute/volume onto the (global) sound manager. */
+  applySettings(): void {
+    if (!this.scene) return;
+    const { muted, volume } = SaveState.get().settings;
+    this.scene.sound.mute = muted;
+    this.scene.sound.volume = volume;
   }
 
   get muted(): boolean {
@@ -28,6 +44,21 @@ class AudioManagerImpl {
     const next = !this.muted;
     this.setMuted(next);
     return next;
+  }
+
+  get volume(): number {
+    return SaveState.get().settings.volume;
+  }
+
+  /**
+   * Master level, 0..1. This scales the sound manager rather than the music
+   * track, so sound effects move with it — "mute all volume" and a slider that
+   * only touched the background loop would disagree with each other.
+   */
+  setVolume(v: number): void {
+    const clamped = Math.min(1, Math.max(0, v));
+    SaveState.setSetting('volume', clamped);
+    if (this.scene) this.scene.sound.volume = clamped;
   }
 
   playMusic(key: string): void {

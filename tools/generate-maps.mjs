@@ -403,7 +403,10 @@ function buildAboutInterior() {
   prop(m, 'table', 3, 6, { bw: 2 });
   interactable(m, 'about.trainercard', 'pc', 9, 6, { oy: -8 });
   prop(m, 'rug', 5, 7, { bw: 2, blocking: false, floor: true });
-  npc(m, 'npc-townsfolk-b', 'about.photo', 1, 7, { facing: 'right', movement: 'lookAround' });
+  // The NPC introduces Arjun; the framed photo on the wall is a separate
+  // object with its own text. Pointing both at about.photo made the NPC
+  // announce itself as PHOTO.
+  npc(m, 'npc-townsfolk-b', 'about.arjun', 1, 7, { facing: 'right', movement: 'lookAround' });
   return m;
 }
 

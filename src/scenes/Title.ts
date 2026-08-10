@@ -25,6 +25,14 @@ export class Title extends Phaser.Scene {
   }
 
   create(): void {
+    // Phaser keeps one instance of a scene and re-runs create() on re-entry,
+    // so every field set during the last visit is still here. `started` in
+    // particular latched true the first time the player pressed START, which
+    // made select() a no-op for good once they came back from the pause menu.
+    this.started = false;
+    this.index = 0;
+    this.labels = [];
+
     this.cameras.main.fadeIn(300, 0, 0, 0);
     Audio.attach(this);
 
@@ -51,7 +59,9 @@ export class Title extends Phaser.Scene {
       this.labels.push(t);
     });
 
-    this.cursor = this.add.image(cx - 42, 100, 'atlas-game', 'cursor').setOrigin(0, 0);
+    // Origin at the arrow's vertical middle so it points at the centre of the
+    // option, not the top of its letters.
+    this.cursor = this.add.image(cx - 42, 100, 'atlas-game', 'cursor').setOrigin(0, 0.5);
     this.updateCursor();
 
     this.add
@@ -75,7 +85,8 @@ export class Title extends Phaser.Scene {
   }
 
   private updateCursor(): void {
-    this.cursor.y = 100 + this.index * 16;
+    const row = this.labels[this.index];
+    if (row) this.cursor.y = row.y + row.height / 2;
     this.labels.forEach((l, i) => l.setAlpha(i === this.index ? 1 : 0.65));
   }
 

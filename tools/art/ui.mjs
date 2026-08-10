@@ -66,6 +66,35 @@ export function hintIcon() {
   return b;
 }
 
+/**
+ * The corner button that opens the pause menu. Built to the same construction
+ * as the window frame — dark outline, blue border, white field — so it reads
+ * as part of the same UI rather than a browser control sitting on top of it.
+ */
+export function menuButton() {
+  // 16, not 14: the border eats two pixels a side, leaving a 12px field. Three
+  // 2px bars separated by 1px need 8, so an even 2px of padding survives on
+  // every side. At 14 the field is only 10 and the bottom bar ends up flush
+  // against the frame.
+  const S = 16;
+  const INSET = 2;
+  const b = new Bitmap(S, S);
+  b.fill(0, 0, S, S, PAL.uiBg);
+  b.rect(0, 0, S, S, PAL.uiBorderDark);
+  b.rect(1, 1, S - 2, S - 2, PAL.uiBorder);
+  // Clip the corners to match windowFrame's rounding.
+  for (const [cx, cy] of [[0, 0], [S - 1, 0], [0, S - 1], [S - 1, S - 1]]) {
+    b.put(cx, cy, [0, 0, 0, 0]);
+    b.put(cx === 0 ? 1 : S - 2, cy, PAL.uiBorderDark);
+    b.put(cx, cy === 0 ? 1 : S - 2, PAL.uiBorderDark);
+  }
+  // Three bars, inset equally from the inner field on all four sides.
+  const x0 = 2 + INSET;
+  const y0 = 2 + INSET;
+  for (let i = 0; i < 3; i++) b.fill(x0, y0 + i * 3, S - x0 * 2, 2, PAL.uiText);
+  return b;
+}
+
 export function reticleSprite(frame) {
   const b = new Bitmap(16, 16);
   const inset = frame === 0 ? 1 : 2;
