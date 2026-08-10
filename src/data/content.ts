@@ -161,7 +161,7 @@ export const PROJECTS: Project[] = [
       'Builds a knowledge graph from PDFs, videos and web pages, then answers with cited, scaffolded explanations. Runs fully offline.',
     tech: ['Python', 'Neo4j', 'MongoDB', 'Ollama', 'Docker'],
     year: '2026',
-    repo: 'https://github.com/antailbaxt3r/Erica-AI',
+    repo: 'https://github.com/antailbaxt3r/EricaAI',
   },
   {
     name: 'CONTEXTLY',
