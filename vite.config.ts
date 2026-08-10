@@ -6,6 +6,16 @@ import path from 'node:path';
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 
 /**
+ * Identifier appended to every asset URL, so each deploy is a distinct cache
+ * key. Netlify exposes the commit it built; fall back to the build time when
+ * running locally. See src/systems/assetUrl.ts for why this exists.
+ */
+const BUILD_ID =
+  process.env.COMMIT_REF?.slice(0, 8) ||
+  process.env.DEPLOY_ID ||
+  (process.env.NODE_ENV === 'production' ? String(Date.now()) : 'dev');
+
+/**
  * Absolute site URL. Netlify injects `URL` (the primary domain) and
  * `DEPLOY_PRIME_URL` (branch/preview deploys) automatically, so canonical tags,
  * Open Graph URLs and the sitemap are correct on every deploy without anyone
@@ -192,6 +202,9 @@ function staticMirror(): Plugin {
 
 export default defineConfig({
   plugins: [staticMirror()],
+  define: {
+    __BUILD_ID__: JSON.stringify(BUILD_ID),
+  },
   build: {
     target: 'es2022',
     assetsInlineLimit: 0, // keep pixel art as real files so caching works

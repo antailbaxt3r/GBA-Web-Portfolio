@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { SaveState } from '../systems/SaveState';
 import { Audio } from '../systems/AudioManager';
+import { asset } from '../systems/assetUrl';
 
 /**
  * Loads only what the loading screen itself needs — about 2 KB — so the
@@ -15,8 +16,8 @@ export class Boot extends Phaser.Scene {
 
   preload(): void {
     this.load.setPath('assets');
-    this.load.spritesheet('spinner', 'boot/spinner.png', { frameWidth: 16, frameHeight: 16 });
-    this.load.bitmapFont('font-small', 'boot/font-small.png', 'boot/font-small.xml');
+    this.load.spritesheet('spinner', asset('boot/spinner.png'), { frameWidth: 16, frameHeight: 16 });
+    this.load.bitmapFont('font-small', asset('boot/font-small.png'), asset('boot/font-small.xml'));
   }
 
   create(): void {

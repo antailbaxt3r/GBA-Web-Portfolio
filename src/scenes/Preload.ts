@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { VIEW_W, ALL_MAP_KEYS } from '../data/maps';
+import { asset, assets } from '../systems/assetUrl';
 
 const BAR_W = 160;
 const BAR_H = 8;
@@ -26,35 +27,38 @@ export class Preload extends Phaser.Scene {
     this.startedAt = this.time.now;
     this.load.setPath('assets');
 
+    // Every path goes through asset(): a stale copy of any one of these can
+    // desync it from the rest. See src/systems/assetUrl.ts.
+
     // --- tilesets ---
-    this.load.image('tiles-town', 'tilesets/town-exterior.png');
-    this.load.image('tiles-interior', 'tilesets/interior.png');
+    this.load.image('tiles-town', asset('tilesets/town-exterior.png'));
+    this.load.image('tiles-interior', asset('tilesets/interior.png'));
 
     // --- characters (16x24 frames, 3 cols x 4 rows walk [x2 for the player]) ---
     const chars = ['player', 'npc-professor', 'npc-townsfolk-a', 'npc-townsfolk-b', 'npc-trainer', 'npc-clerk'];
     for (const c of chars) {
-      this.load.spritesheet(c, `characters/${c}.png`, { frameWidth: 16, frameHeight: 24 });
+      this.load.spritesheet(c, asset(`characters/${c}.png`), { frameWidth: 16, frameHeight: 24 });
     }
 
     // --- atlas: props, buildings, furniture, UI chrome ---
-    this.load.atlas('atlas-game', 'atlas/atlas-game.png', 'atlas/atlas-game.json');
+    this.load.atlas('atlas-game', asset('atlas/atlas-game.png'), asset('atlas/atlas-game.json'));
 
     // --- fonts ---
-    this.load.bitmapFont('font-main', 'fonts/font-main.png', 'fonts/font-main.xml');
+    this.load.bitmapFont('font-main', asset('fonts/font-main.png'), asset('fonts/font-main.xml'));
 
     // --- standalone UI ---
-    this.load.spritesheet('reticle', 'ui/reticle.png', { frameWidth: 16, frameHeight: 16 });
-    this.load.image('title-emblem', 'ui/title-emblem.png');
+    this.load.spritesheet('reticle', asset('ui/reticle.png'), { frameWidth: 16, frameHeight: 16 });
+    this.load.image('title-emblem', asset('ui/title-emblem.png'));
 
     // --- maps ---
     for (const key of ALL_MAP_KEYS) {
-      this.load.tilemapTiledJSON(`map-${key}`, `maps/${key}.json`);
-      this.load.json(`obj-${key}`, `maps/${key}.objects.json`);
+      this.load.tilemapTiledJSON(`map-${key}`, asset(`maps/${key}.json`));
+      this.load.json(`obj-${key}`, asset(`maps/${key}.objects.json`));
     }
 
     // --- audio (non-critical: the game runs fine silent) ---
     const audio = ['bgm-town', 'bgm-interior', 'sfx-bump', 'sfx-door', 'sfx-select', 'sfx-text'];
-    for (const a of audio) this.load.audio(a, [`audio/${a}.ogg`, `audio/${a}.m4a`]);
+    for (const a of audio) this.load.audio(a, assets([`audio/${a}.ogg`, `audio/${a}.m4a`]));
 
     this.load.on(Phaser.Loader.Events.PROGRESS, this.onProgress, this);
     this.load.on(Phaser.Loader.Events.FILE_LOAD_ERROR, this.onError, this);
