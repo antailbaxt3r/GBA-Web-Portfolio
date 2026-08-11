@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { VIEW_W, VIEW_H } from '../data/maps';
 import { Audio } from '../systems/AudioManager';
-import { SWITCH_TINT, PAUSE_SWITCH_TINT } from '../data/routes';
+import { PAUSE_SWITCH_TINT } from '../data/routes';
 
 const PAD = 12;
 const ROW_H = 16;
