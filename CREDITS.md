@@ -52,9 +52,21 @@ All music and sound effects are **original**, synthesized from scratch by
 noise oscillators written to 8-bit WAV, then encoded to OGG/M4A with ffmpeg.
 No samples, no loops, no third-party audio.
 
+## Icons
+
+The `/minimal` page uses icons from
+[Font Awesome Free 7](https://fontawesome.com), licensed
+**[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)**. Attribution is
+given here as required by that licence.
+
+Only the individual SVG paths for the icons actually used are inlined into the
+page at build time by `vite.config.ts` — no webfont, stylesheet or CDN request
+ships with the site. The game itself uses none of them.
+
 ## Software
 
 - [Phaser 4](https://phaser.io) — MIT
 - [easystar.js](https://github.com/prettymuchbryce/easystarjs) — MIT
 - [opentype.js](https://github.com/opentypejs/opentype.js) — MIT (build-time only)
 - [Vite](https://vite.dev) — MIT
+- [Font Awesome Free](https://fontawesome.com) — icons CC BY 4.0, code MIT (build-time only)

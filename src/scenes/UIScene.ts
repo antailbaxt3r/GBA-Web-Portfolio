@@ -10,6 +10,7 @@ import { CONTENT, type Choice } from '../data/content';
 import { VIEW_W } from '../data/maps';
 import type { Direction } from '../types';
 import { World } from './World';
+import { openMinimalSite } from '../systems/navigate';
 
 // Title imports UIScene to launch it, so importing Title back would make a
 // cycle. Its key is referenced by name instead, as Preload already does.
@@ -66,6 +67,7 @@ export class UIScene extends Phaser.Scene {
 
     this.pause.onClose = () => this.closePause();
     this.pause.onExit = () => this.exitToTitle();
+    this.pause.onMinimal = () => openMinimalSite();
 
     this.input.keyboard?.on('keydown-ESC', this.onEscape, this);
 

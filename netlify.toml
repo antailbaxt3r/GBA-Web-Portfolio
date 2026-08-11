@@ -60,6 +60,13 @@
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
 
+# The plain-HTML portfolio. Generated from content.ts on every build, so it must
+# revalidate for the same reason index.html does.
+[[headers]]
+  for = "/minimal/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
 [[headers]]
   for = "/favicon.png"
   [headers.values]

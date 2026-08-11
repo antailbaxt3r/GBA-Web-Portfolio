@@ -5,16 +5,22 @@ import { Audio } from '../systems/AudioManager';
 import { META } from '../data/content';
 import { World } from './World';
 import { UIScene } from './UIScene';
+import { SWITCH_TINT } from '../data/routes';
+import { openMinimalSite } from '../systems/navigate';
 
 /**
  * The title screen exists for a hard technical reason as well as a stylistic
  * one: browsers block WebAudio until a user gesture, so without a "press to
  * start" gate the music would never play.
  */
+/** First option's baseline, and the gap between options. */
+const OPT_Y = 90;
+const OPT_H = 16;
+
 export class Title extends Phaser.Scene {
   static readonly KEY = 'Title';
 
-  private options: { label: string; run: () => void }[] = [];
+  private options: { label: string; run: () => void; tint?: number }[] = [];
   private index = 0;
   private cursor!: Phaser.GameObjects.Image;
   private labels: Phaser.GameObjects.BitmapText[] = [];
@@ -37,10 +43,10 @@ export class Title extends Phaser.Scene {
     Audio.attach(this);
 
     const cx = VIEW_W / 2;
-    this.add.image(cx, 34, 'title-emblem').setOrigin(0.5, 0.5);
+    this.add.image(cx, 30, 'title-emblem').setOrigin(0.5, 0.5);
 
-    this.add.bitmapText(cx, 58, 'font-main', META.name).setOrigin(0.5, 0).setTint(0xf8f8f8);
-    this.add.bitmapText(cx, 74, 'font-small', META.tagline).setOrigin(0.5, 0);
+    this.add.bitmapText(cx, 52, 'font-main', META.name).setOrigin(0.5, 0).setTint(0xf8f8f8);
+    this.add.bitmapText(cx, 68, 'font-small', META.tagline).setOrigin(0.5, 0);
 
     const hasSave = SaveState.hasSave();
     this.options = [];
@@ -48,12 +54,19 @@ export class Title extends Phaser.Scene {
       this.options.push({ label: 'CONTINUE', run: () => this.begin(true) });
     }
     this.options.push({ label: hasSave ? 'NEW GAME' : 'START', run: () => this.begin(false) });
+    // Tinted, because it leaves the game entirely rather than starting it.
+    this.options.push({
+      label: 'MINIMAL SITE',
+      run: () => openMinimalSite(),
+      tint: SWITCH_TINT,
+    });
 
     this.options.forEach((o, i) => {
       const t = this.add
-        .bitmapText(cx - 30, 100 + i * 16, 'font-small', o.label)
+        .bitmapText(cx - 30, OPT_Y + i * OPT_H, 'font-small', o.label)
         .setOrigin(0, 0)
         .setInteractive({ useHandCursor: true });
+      if (o.tint !== undefined) t.setTint(o.tint);
       t.on('pointerdown', () => { this.index = i; this.select(); });
       t.on('pointerover', () => { this.index = i; this.updateCursor(); });
       this.labels.push(t);
@@ -61,11 +74,11 @@ export class Title extends Phaser.Scene {
 
     // Origin at the arrow's vertical middle so it points at the centre of the
     // option, not the top of its letters.
-    this.cursor = this.add.image(cx - 42, 100, 'atlas-game', 'cursor').setOrigin(0, 0.5);
+    this.cursor = this.add.image(cx - 42, OPT_Y, 'atlas-game', 'cursor').setOrigin(0, 0.5);
     this.updateCursor();
 
     this.add
-      .bitmapText(cx, VIEW_H - 22, 'font-small', 'TAP   or   ARROWS + ENTER')
+      .bitmapText(cx, VIEW_H - 18, 'font-small', 'TAP   or   ARROWS + ENTER')
       .setOrigin(0.5, 0)
       .setAlpha(0.7);
 

@@ -25,7 +25,7 @@ export class Preload extends Phaser.Scene {
   preload(): void {
     this.buildLoadingScreen();
     this.startedAt = this.time.now;
-    this.load.setPath('assets');
+    this.load.setPath('/assets');
 
     // Every path goes through asset(): a stale copy of any one of these can
     // desync it from the rest. See src/systems/assetUrl.ts.

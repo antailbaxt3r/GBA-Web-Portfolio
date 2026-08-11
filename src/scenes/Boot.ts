@@ -15,7 +15,9 @@ export class Boot extends Phaser.Scene {
   }
 
   preload(): void {
-    this.load.setPath('assets');
+    // Absolute, not relative: a page served from a nested path (/minimal/)
+    // would otherwise resolve these against that directory.
+    this.load.setPath('/assets');
     this.load.spritesheet('spinner', asset('boot/spinner.png'), { frameWidth: 16, frameHeight: 16 });
     this.load.bitmapFont('font-small', asset('boot/font-small.png'), asset('boot/font-small.xml'));
   }

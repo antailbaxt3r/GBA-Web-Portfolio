@@ -1,21 +1,25 @@
 import Phaser from 'phaser';
 import { VIEW_W, VIEW_H } from '../data/maps';
 import { Audio } from '../systems/AudioManager';
+import { SWITCH_TINT, PAUSE_SWITCH_TINT } from '../data/routes';
 
 const PAD = 12;
 const ROW_H = 16;
 const FIRST_ROW = 26;
 
-type RowId = 'close' | 'sound' | 'volume' | 'exit';
+type RowId = 'close' | 'sound' | 'volume' | 'minimal' | 'exit';
 
 /**
  * Resume first, so the default cursor position is the harmless one and the
- * destructive row is as far from it as the list allows.
+ * destructive row is as far from it as the list allows. The two rows that
+ * leave the game sit together at the bottom, with the one that leaves the site
+ * entirely tinted apart from the rest.
  */
-const ROWS: { id: RowId; label: string }[] = [
+const ROWS: { id: RowId; label: string; tint?: number }[] = [
   { id: 'close', label: 'RESUME' },
   { id: 'sound', label: 'SOUND' },
   { id: 'volume', label: 'VOL' },
+  { id: 'minimal', label: 'MINIMAL SITE', tint: PAUSE_SWITCH_TINT },
   { id: 'exit', label: 'EXIT TO TITLE' },
 ];
 
@@ -62,6 +66,7 @@ export class PauseMenu {
 
   onClose?: () => void;
   onExit?: () => void;
+  onMinimal?: () => void;
 
   constructor(scene: Phaser.Scene) {
     this.scene = scene;
@@ -127,9 +132,12 @@ export class PauseMenu {
   }
 
   private label(text: string, row: number): Phaser.GameObjects.BitmapText {
-    return this.scene.add
+    const t = this.scene.add
       .bitmapText(PAD, FIRST_ROW + row * ROW_H, 'font-main', text)
       .setOrigin(0, 0);
+    const tint = ROWS[row]?.tint;
+    if (tint !== undefined) t.setTint(tint);
+    return t;
   }
 
   private wirePointer(labels: Phaser.GameObjects.BitmapText[]): void {
@@ -230,6 +238,10 @@ export class PauseMenu {
         Audio.toggleMute();
         Audio.play('sfx-select', 0.4);
         this.refresh();
+        break;
+      case 'minimal':
+        Audio.play('sfx-select', 0.45);
+        this.onMinimal?.();
         break;
       case 'exit':
         Audio.play('sfx-select', 0.45);
